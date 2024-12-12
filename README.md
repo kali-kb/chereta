@@ -1,18 +1,21 @@
 # Chereta
 
-To start your Phoenix server:
+This is a live auctioning website backend built with Elixir and Phoenix Framework, created as a learning project to explore and experiment with WebSockets and real-time communication.
 
-  * Run `mix setup` to install and setup dependencies
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+## Features
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+- **Real-time bidding**: Bidders can place bids on active auctions and see updated bid amounts instantly.
+- **Live auction updates**: All participants are notified of bid updates and auction events in real time.
+- **Bidder presence tracking**: The app tracks the presence of bidders participating in an auction and displays a list of active participants in real-time.
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+- **Multiple auctions**: Users can view and participate in multiple ongoing auctions.
 
-## Learn more
+  
+## Tech Stack
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+- **Elixir**: A functional programming language used for building concurrent, distributed systems.
+- **Phoenix**: A web framework for Elixir, perfect for handling real-time applications and WebSockets.
+- **PostgreSQL**: Database for storing auction data (auctions, bids, user information).
+  
+
+
