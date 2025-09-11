@@ -6,6 +6,12 @@ services:
     startCommand: "_build/prod/rel/chereta/bin/chereta start"
     plan: free
     env: production
+    buildFilter:
+      paths:
+      - lib/**
+      - config/**
+      - mix.exs
+      - mix.lock
     envVars:
       - key: DATABASE_URL
         fromDatabase:
