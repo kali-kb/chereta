@@ -1,5 +1,13 @@
 import Config
 
+# For production, don't forget to configure the url host
+# to something meaningful, Phoenix uses this information
+# when generating URLs.
+config :chereta, CheretaWeb.Endpoint,
+  url: [host: "chereta-api.onrender.com", port: 80],
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  force_ssl: [rewrite_on: [:x_forwarded_proto]]
+
 # Configures Swoosh API Client
 config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: Chereta.Finch
 

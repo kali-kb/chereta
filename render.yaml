@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: chereta-api
+    runtime: elixir
+    buildCommand: "./build.sh"
+    startCommand: "_build/prod/rel/chereta/bin/chereta start"
+    plan: free
+    env: production
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: chereta-db
+          property: connectionString
+      - key: SECRET_KEY_BASE
+        generateValue: true
+      - key: PHX_HOST
+        fromService:
+          type: web
+          name: chereta-api
+          property: host
+      - key: PORT
+        value: 4000
+      - key: PHX_SERVER
+        value: true
+      - key: MIX_ENV
+        value: prod
+      - key: POOL_SIZE
+        value: 10
+
+databases:
+  - name: chereta-db
+    databaseName: chereta_prod
+    user: chereta
+    plan: free

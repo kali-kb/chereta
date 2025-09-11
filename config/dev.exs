@@ -1,17 +1,35 @@
 import Config
 
+# Load environment variables from .env file in development (WSL compatible)
+env_file = Path.join([__DIR__, "..", ".env"])
+if File.exists?(env_file) do
+  File.stream!(env_file)
+  |> Stream.map(&String.trim/1)
+  |> Stream.reject(&String.starts_with?(&1, "#"))
+  |> Stream.reject(&(&1 == ""))
+  |> Stream.map(&String.split(&1, "=", parts: 2))
+  |> Stream.filter(&(length(&1) == 2))
+  |> Enum.each(fn [key, value] ->
+    cleaned_value = value |> String.trim() |> String.trim_leading("\"") |> String.trim_trailing("\"")
+    System.put_env(key, cleaned_value)
+  end)
+end
+
 # Configure your database
 config :chereta, Chereta.Repo,
-  # username: "7qi9h5",
-  # password: "xau_qU3YT4ZEseSrcnA1sATx6FekO8vx41xY1",
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  port: 5432,
-  database: "chereta_dev",
+  username: System.get_env("DB_USERNAME"),
+  password: System.get_env("DB_PASSWORD"),
+  hostname: System.get_env("DB_HOSTNAME"),
+  database: System.get_env("DB_DATABASE"),
+  port: String.to_integer(System.get_env("DB_PORT") || "5432"),
+  ssl: [verify: :verify_none],
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
-  pool_size: 10
+  pool_size: 10,
+  timeout: 60_000,
+  ownership_timeout: 60_000,
+  queue_target: 5_000,
+  queue_interval: 10_000
 
 # For development, we disable any cache and enable
 # debugging and code reloading.

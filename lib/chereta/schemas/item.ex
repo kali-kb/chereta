@@ -22,5 +22,7 @@ defmodule Chereta.Schemas.Item do
     item
     |> cast(attrs, [:item_id, :user_id, :category_id, :title, :description, :image_url, :starting_bid, :auction_end])
     |> validate_required([:user_id, :category_id, :title, :auction_end, :starting_bid])
+    |> foreign_key_constraint(:category_id, name: :items_category_id_fkey, message: "Category does not exist")
+    |> foreign_key_constraint(:user_id, name: :items_user_id_fkey, message: "User does not exist")
   end
 end
