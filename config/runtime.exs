@@ -21,20 +21,41 @@ if System.get_env("PHX_SERVER") do
 end
 
 if config_env() == :prod do
-  database_url =
-    System.get_env("DATABASE_URL") ||
+  # Database configuration - supports both DATABASE_URL and individual credentials
+  database_config = cond do
+    System.get_env("DATABASE_URL") ->
+      # Use DATABASE_URL if provided (Render's managed PostgreSQL)
+      database_url = System.get_env("DATABASE_URL")
+      maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
+
+      [
+        ssl: true,
+        url: database_url,
+        pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+        socket_options: maybe_ipv6
+      ]
+
+    System.get_env("DB_USERNAME") ->
+      # Use individual database credentials (for external databases like Neon)
+      [
+        username: System.get_env("DB_USERNAME"),
+        password: System.get_env("DB_PASSWORD"),
+        hostname: System.get_env("DB_HOSTNAME"),
+        database: System.get_env("DB_DATABASE"),
+        port: String.to_integer(System.get_env("DB_PORT") || "5432"),
+        ssl: [verify: :verify_none],
+        pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
+      ]
+
+    true ->
       raise """
-      environment variable DATABASE_URL is missing.
-      For example: ecto://USER:PASS@HOST/DATABASE
+      Database configuration is missing.
+      Either provide DATABASE_URL or individual database credentials:
+      DB_USERNAME, DB_PASSWORD, DB_HOSTNAME, DB_DATABASE, DB_PORT
       """
+  end
 
-  maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
-
-  config :chereta, Chereta.Repo,
-    ssl: true,
-    url: database_url,
-    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
-    socket_options: maybe_ipv6
+  config :chereta, Chereta.Repo, database_config
 
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you

@@ -13,10 +13,18 @@ services:
       - mix.exs
       - mix.lock
     envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: chereta-db
-          property: connectionString
+      # Neon Database Configuration
+      - key: DB_USERNAME
+        value: neondb_owner
+      - key: DB_PASSWORD
+        value: npg_bHKdIrTjq3G9
+      - key: DB_HOSTNAME
+        value: ep-long-leaf-a5pdirxg-pooler.us-east-2.aws.neon.tech
+      - key: DB_DATABASE
+        value: neondb
+      - key: DB_PORT
+        value: 5432
+      # Phoenix Configuration
       - key: SECRET_KEY_BASE
         generateValue: true
       - key: PHX_HOST
@@ -33,8 +41,4 @@ services:
       - key: POOL_SIZE
         value: 10
 
-databases:
-  - name: chereta-db
-    databaseName: chereta_prod
-    user: chereta
-    plan: free
+# Note: Removed databases section since we're using external Neon database
