@@ -2,6 +2,18 @@ defmodule CheretaWeb.ItemController do
   use CheretaWeb, :controller
   alias Chereta.Context.Item
 
+  # Get all items for auctions page
+  def index_all(conn, _params) do
+    items = Item.list_items()
+    render(conn, :index, items: items)
+  end
+
+  # Get specific auction/item for auction detail page
+  def show_auction(conn, %{"id" => id}) do
+    item = Item.get_item(id)
+    render(conn, :show, item: item)
+  end
+
   def index(conn, _params) do
     items = Item.list_items()
     IO.inspect(items, label: "items with association")

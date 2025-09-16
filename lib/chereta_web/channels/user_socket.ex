@@ -36,12 +36,16 @@ defmodule CheretaWeb.UserSocket do
   # performing token verification on connect.
   @impl true
   def connect(params, socket, _connect_info) do
-    IO.inspect("params:" <> inspect(params))
+    IO.inspect("Socket connect params: #{inspect(params)}")
     case authenticate_user(params["token"]) do
-      {:ok, claims} -> {:ok, assign(socket, :user, claims)}
-      {:error, _reason} -> :error
+      {:ok, user} ->
+        IO.inspect("User authenticated: #{inspect(user)}")
+        {:ok, assign(socket, :user, user)}
+      {:error, reason} ->
+        IO.inspect("Authentication failed: #{inspect(reason)}, allowing anonymous connection")
+        # Allow anonymous connection for read-only access
+        {:ok, assign(socket, :user, nil)}
     end
-    # {:ok, socket}
   end
 
   # Socket IDs are topics that allow you to identify all sockets for a given user:

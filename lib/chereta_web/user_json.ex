@@ -12,7 +12,7 @@ defmodule CheretaWeb.UserJSON do
 
   def create(%{user: user, token: token}) do
     %{
-      data: data(user),
+      user: data(user),
       token: token
     }
   end
@@ -21,7 +21,8 @@ defmodule CheretaWeb.UserJSON do
     %{
       id: user.user_id,
       name: user.name,
-      email: user.email
+      email: user.email,
+      phone: user.phone
     }
   end
 end

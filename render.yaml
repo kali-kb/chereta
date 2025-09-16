@@ -35,7 +35,7 @@ services:
       - key: PORT
         value: 4000
       - key: PHX_SERVER
-        value: true
+        value: "true"
       - key: MIX_ENV
         value: prod
       - key: POOL_SIZE

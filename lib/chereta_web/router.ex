@@ -12,8 +12,13 @@ defmodule CheretaWeb.Router do
 
   scope "/api", CheretaWeb do
     pipe_through :api
+    get "/health", HealthController, :check
     post "/login", SessionController, :create
+    get "/user/profile", SessionController, :profile
+    get "/auctions", ItemController, :index_all
+    get "/auctions/:id", ItemController, :show_auction
     resources "/categories", CategoryController
+    post "/categories/batch", CategoryController, :batch_create
     get "/items/:item_id", ItemController, :show
     # resources "items/:item_id/bids/:bid_id"
     resources "/users", UserController do

@@ -34,7 +34,8 @@ defmodule CheretaWeb.ItemJSON do
           user: %{
             user_id: bid.user.user_id,
             name: bid.user.name,
-            email: bid.user.email
+            email: bid.user.email,
+            phone: bid.user.phone
           }
         }
       end)

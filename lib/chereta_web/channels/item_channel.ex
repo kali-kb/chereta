@@ -18,12 +18,20 @@ defmodule CheretaWeb.ItemChannel do
 
   @impl true
   def handle_info(:after_join, socket) do
-    {:ok, _} = Presence.track(socket, socket.assigns.user.user_id, %{
-      user_name: socket.assigns.user.name,
-      online_at: inspect(System.system_time(:second))
-    })
-    push(socket, "presence_state", Presence.list(socket))
-    {:noreply, socket}
+    case socket.assigns[:user] do
+      nil ->
+        # User is not authenticated, skip presence tracking
+        IO.puts("User not authenticated for channel join")
+        {:noreply, socket}
+      user ->
+        # User is authenticated, track presence
+        {:ok, _} = Presence.track(socket, user.user_id, %{
+          user_name: user.name,
+          online_at: inspect(System.system_time(:second))
+        })
+        push(socket, "presence_state", Presence.list(socket))
+        {:noreply, socket}
+    end
   end
   # Channels can be used in a request/response fashion
   # by sending replies to requests from the client

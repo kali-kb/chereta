@@ -23,6 +23,7 @@ defmodule CheretaWeb.UserController do
     user_params = %{
       "name" => user_params["name"],
       "email" => user_params["email"],
+      "phone" => user_params["phone"],
       "password_hash" => user_params["password"]
     }
     with {:ok, user} <- User.create_user(user_params),

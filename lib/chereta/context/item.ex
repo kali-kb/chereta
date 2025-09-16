@@ -5,6 +5,7 @@ defmodule Chereta.Context.Item do
   def list_items() do
     data = Repo.all(Item) |> Repo.preload([:category, bids: [:user]])
     IO.inspect(data)
+    data
   end
 
   def get_item(item_id) do

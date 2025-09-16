@@ -1,7 +1,7 @@
 defmodule CheretaWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :chereta
 
-  plug CORSPlug, origin: ["http://localhost:3000", "http://localhost:4002", "https://chereta.netlify.app"]
+  plug CORSPlug, origin: ["http://localhost:3000", "http://localhost:4002", "https://chereta.netlify.app", "https://chereta-b6kt.onrender.com"]
 
   socket "/socket", CheretaWeb.UserSocket,
     websocket: true,

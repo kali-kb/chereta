@@ -3,11 +3,25 @@ defmodule CheretaWeb.SessionJSON do
 
   def create(%{user: user, token: token}) do
     %{
-      data: %{
+      user: %{
         id: user.user_id,
         email: user.email,
         name: user.name,
-        token: token
+        phone: user.phone
+      },
+      token: token
+    }
+  end
+
+  def profile(%{user: user}) do
+    %{
+      data: %{
+        user: %{
+          id: user.user_id,
+          email: user.email,
+          name: user.name,
+          phone: user.phone
+        }
       }
     }
   end

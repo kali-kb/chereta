@@ -15,6 +15,8 @@ defmodule CheretaWeb.BidJSON do
       item_id: bid.item_id,
       user: %{
         name: bid.user.name,
+        email: bid.user.email,
+        phone: bid.user.phone
       },
       user_id: bid.user_id,
       bid_amount: bid.bid_amount,
