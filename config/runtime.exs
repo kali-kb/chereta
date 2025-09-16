@@ -72,6 +72,12 @@ if config_env() == :prod do
   host = System.get_env("PHX_HOST") || "example.com"
   port = String.to_integer(System.get_env("PORT") || "4000")
 
+  # Configure CORS for production frontend
+  frontend_url = System.get_env("FRONTEND_URL")
+  if frontend_url do
+    IO.puts("CORS configured for frontend: #{frontend_url}")
+  end
+
   config :chereta, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
 
   config :chereta, CheretaWeb.Endpoint,

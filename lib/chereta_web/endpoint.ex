@@ -1,7 +1,31 @@
 defmodule CheretaWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :chereta
 
-  plug CORSPlug, origin: ["http://localhost:3000", "http://localhost:4002", "https://cheretaet.netlify.app", "https://chereta-b6kt.onrender.com"]
+  # Dynamic CORS configuration based on environment
+  @cors_origins case Mix.env() do
+    :prod ->
+      base_origins = ["https://chereta-b6kt.onrender.com"]
+      # Add Netlify URL from environment variable or use a wildcard pattern
+      netlify_url = System.get_env("FRONTEND_URL")
+      if netlify_url do
+        [netlify_url | base_origins]
+      else
+        # Allow common Netlify patterns
+        base_origins ++ [
+          "https://cheretaet.netlify.app",
+          # Add pattern matching for branch deploys
+          ~r/https:\/\/[a-zA-Z0-9-]+--cheretaet\.netlify\.app$/,
+          ~r/https:\/\/.*\.netlify\.app$/
+        ]
+      end
+    _ ->
+      ["http://localhost:3000", "http://localhost:4002", "https://chereta-b6kt.onrender.com"]
+  end
+
+  plug CORSPlug,
+    origin: @cors_origins,
+    headers: ["Authorization", "Content-Type", "Accept", "Origin", "User-Agent", "DNT", "Cache-Control", "X-Mx-ReqToken", "Keep-Alive", "X-Requested-With", "If-Modified-Since", "X-CSRF-Token"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
 
   socket "/socket", CheretaWeb.UserSocket,
     websocket: true,
